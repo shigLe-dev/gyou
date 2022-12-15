@@ -35,6 +35,7 @@ namespace gyou
         void RefleshScreen()
         {
             Console.Clear();
+            Console.SetCursorPosition(0, 0);
             StringBuilder builder = new StringBuilder();
             for (int y = 0; y < height; y++)
             {
@@ -44,12 +45,11 @@ namespace gyou
                 }
             }
             Console.Write(builder.ToString());
-            Console.SetCursorPosition(0, 0);
         }
 
         void ProcessKeyPress()
         {
-            c = Console.ReadKey(false).KeyChar;
+            c = Console.ReadKey(true).KeyChar;
         }
 
         static void Main(string[] args) { Program program = new Program(); }
