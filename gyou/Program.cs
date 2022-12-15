@@ -6,10 +6,13 @@ namespace gyou
     {
         int width;
         int height;
-        char c;
+
+        ConsoleKeyInfo key;
+        Text text;
 
         Program()
         {
+            text = new Text(@"aiueo");
             Init();
 
             while (true)
@@ -40,7 +43,7 @@ namespace gyou
             {
                 for (int x = 0; x < width; x++)
                 {
-                    builder.Append(c);
+                    builder.Append(text.GetChar(x, y));
                 }
             }
             Console.Write(builder.ToString());
@@ -48,7 +51,7 @@ namespace gyou
 
         void ProcessKeyPress()
         {
-            c = Console.ReadKey(true).KeyChar;
+            key = Console.ReadKey(true);
         }
 
         static void Main(string[] args) { Program program = new Program(); }
