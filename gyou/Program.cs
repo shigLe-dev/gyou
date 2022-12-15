@@ -12,7 +12,7 @@ namespace gyou
 
         Program()
         {
-            text = new Text(@"aiueo");
+            text = new Text("aiueo\nafawfaw");
             Init();
 
             while (true)
@@ -32,7 +32,7 @@ namespace gyou
         void SetWindowSize()
         {
             width = Console.WindowWidth;
-            height = Console.WindowHeight; 
+            height = Console.WindowHeight;
         }
 
         void RefleshScreen()
@@ -43,7 +43,9 @@ namespace gyou
             {
                 for (int x = 0; x < width; x++)
                 {
-                    builder.Append(text.GetChar(x, y));
+                    char c = text.GetChar(x, y);
+                    c = Text.IsNewLineChar(c) ? ' ' : c;
+                    builder.Append(c);
                 }
             }
             Console.Write(builder.ToString());

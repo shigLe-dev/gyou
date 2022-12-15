@@ -1,4 +1,6 @@
-﻿namespace gyou
+﻿using System.Diagnostics;
+
+namespace gyou
 {
     public class Text
     {
@@ -42,7 +44,7 @@
             return ret;
         }
 
-        private bool IsNewLineChar(char c)
+        public static bool IsNewLineChar(char c)
         {
             if (c == '\n'
              || c == '\r')
