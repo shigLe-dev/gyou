@@ -4,32 +4,54 @@ namespace gyou
 {
     internal class Program
     {
-        static void Main(string[] args)
+        int width;
+        int height;
+        char c;
+
+        Program()
         {
-            Console.CursorVisible = false;
-            int c = 0;
+            Init();
+
             while (true)
             {
-                DateTime start = DateTime.Now;
-
-                int width = Console.WindowWidth;
-                int height = Console.WindowHeight;
-
-                while (true) if ((DateTime.Now - start).TotalSeconds >= (1 / 10d)) break;
-
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < height; i++)
-                {
-                    for (int j = 0; j < width; j++)
-                    {
-                        builder.Append((char)((c % 25) + 'a'));
-                    }
-                }
-
-                Console.Clear();
-                Console.Write($"\u001b[0;0f\u001b[j{builder}");
-                c++;
+                SetWindowSize();
+                RefleshScreen();
+                ProcessKeyPress();
             }
         }
+
+        void Init()
+        {
+            Console.CursorVisible = false;
+            Console.SetCursorPosition(0, 0);
+        }
+
+        void SetWindowSize()
+        {
+            width = Console.WindowWidth;
+            height = Console.WindowHeight; 
+        }
+
+        void RefleshScreen()
+        {
+            Console.Clear();
+            StringBuilder builder = new StringBuilder();
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    builder.Append(c);
+                }
+            }
+            Console.Write(builder.ToString());
+            Console.SetCursorPosition(0, 0);
+        }
+
+        void ProcessKeyPress()
+        {
+            c = Console.ReadKey(false).KeyChar;
+        }
+
+        static void Main(string[] args) { Program program = new Program(); }
     }
 }
