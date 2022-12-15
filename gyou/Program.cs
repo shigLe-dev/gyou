@@ -12,7 +12,47 @@ namespace gyou
 
         Program()
         {
-            text = new Text("aiueo\nafawfaw");
+            text = new Text(@"aiueoa
+fawfaw
+
+afwsfwafwa
+
+fawefawf
+
+faw
+f
+aw
+faw
+ef
+
+
+f
+aw
+feaa
+f
+
+aaaafwefawfwa
+
+f
+afaweafaaaaaaaaaaaaaaaaaaaa
+
+fa
+wf
+eaw
+
+
+
+e
+
+e
+f
+f
+f
+afasd
+fa
+ewaf
+asd
+fa");
             Init();
 
             while (true)
