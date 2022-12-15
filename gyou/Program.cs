@@ -34,7 +34,6 @@ namespace gyou
 
         void RefleshScreen()
         {
-            Console.Clear();
             Console.SetCursorPosition(0, 0);
             StringBuilder builder = new StringBuilder();
             for (int y = 0; y < height; y++)
