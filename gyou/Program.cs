@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 
 namespace gyou
 {
@@ -17,8 +18,8 @@ namespace gyou
 
 namespace gyou
 {
-    internal class Program
-    {
+    internal class Programああああ
+    {🤣ああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
         int width;
         int height;
         int textXPosition;
@@ -108,6 +109,7 @@ namespace gyou
 
         void Init()
         {
+            Console.OutputEncoding = Encoding.UTF8;
             Console.CursorVisible = false;
             Console.SetCursorPosition(0, 0);
         }
@@ -126,7 +128,14 @@ namespace gyou
             {
                 for (int x = 0; x < width; x++)
                 {
-                    builder.Append(text.GetCharacter(x + textXPosition, y + textYPosition).ToString());
+                    Character c = text.GetCharacter(x + textXPosition, y + textYPosition);
+                    x += c.width - 1;
+                    if (x >= width)
+                    {
+                        builder.Append(' ');
+                        continue;
+                    }
+                    builder.Append(c.ToString());
                 }
             }
             Console.Write(builder.ToString());

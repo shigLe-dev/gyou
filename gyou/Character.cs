@@ -1,14 +1,24 @@
-﻿namespace gyou
+﻿using Kodnix.Character.Extensions;
+
+namespace gyou
 {
     public struct Character
     {
         public readonly string rawSource;
         public readonly CharacterType characterType;
+        public readonly int width = 1;
 
         public Character(string rawSource, CharacterType characterType)
         {
             this.rawSource = rawSource;
             this.characterType = characterType;
+
+            switch (characterType)
+            {
+                case CharacterType.NORMAL:
+                    width = rawSource.GetEastAsianWidthLength();
+                    break;
+            }
         }
 
         public override string ToString()
