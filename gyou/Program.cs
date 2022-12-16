@@ -6,53 +6,29 @@ namespace gyou
     {
         int width;
         int height;
-
+        int textXPosition;
+        int textYPosition;
         ConsoleKeyInfo key;
         Text text;
 
         Program()
         {
-            text = new Text(@"aiueoa
-fawfaw
+            text = new Text(@"using System.Text;
 
-afwsfwafwa
+namespace gyou
+{
+    internal class Program
+    {
+        int width;
+        int height;
+        int textXPosition;
+        int textYPosition;
+        ConsoleKeyInfo key;
+        Text text;
 
-fawefawf
-
-faw
-f
-aw
-faw
-ef
-
-
-f
-aw
-feaa
-f
-
-aaaafwefawfwa
-
-f
-afaweafaaaaaaaaaaaaaaaaaaaa
-
-fa
-wf
-eaw
-
-
-
-e
-
-e
-f
-f
-f
-afasd
-fa
-ewaf
-asd
-fa");
+        Program()
+        {
+            text = new Text();
             Init();
 
             while (true)
@@ -83,7 +59,7 @@ fa");
             {
                 for (int x = 0; x < width; x++)
                 {
-                    char c = text.GetChar(x, y);
+                    char c = text.GetChar(x + textXPosition, y + textYPosition);
                     c = Text.IsNewLineChar(c) ? ' ' : c;
                     builder.Append(c);
                 }
@@ -94,6 +70,91 @@ fa");
         void ProcessKeyPress()
         {
             key = Console.ReadKey(true);
+
+            switch (key.Key)
+            {
+                case ConsoleKey.RightArrow:
+                    textXPosition++;
+                    break;
+                case ConsoleKey.LeftArrow:
+                    textXPosition--;
+                    textXPosition = textXPosition < 0 ? 0 : textXPosition;
+                    break;
+                case ConsoleKey.UpArrow:
+                    textYPosition--;
+                    textYPosition = textYPosition < 0 ? 0 : textYPosition;
+                    break;
+                case ConsoleKey.DownArrow:
+                    textYPosition++;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        static void Main(string[] args) { Program program = new Program(); }
+    }
+}
+");
+            Init();
+
+            while (true)
+            {
+                SetWindowSize();
+                RefleshScreen();
+                ProcessKeyPress();
+            }
+        }
+
+        void Init()
+        {
+            Console.CursorVisible = false;
+            Console.SetCursorPosition(0, 0);
+        }
+
+        void SetWindowSize()
+        {
+            width = Console.WindowWidth;
+            height = Console.WindowHeight;
+        }
+
+        void RefleshScreen()
+        {
+            Console.SetCursorPosition(0, 0);
+            StringBuilder builder = new StringBuilder();
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    builder.Append(text.GetCharacter(x + textXPosition, y + textYPosition).ToString());
+                }
+            }
+            Console.Write(builder.ToString());
+        }
+
+        void ProcessKeyPress()
+        {
+            key = Console.ReadKey(true);
+
+            switch (key.Key)
+            {
+                case ConsoleKey.RightArrow:
+                    textXPosition++;
+                    break;
+                case ConsoleKey.LeftArrow:
+                    textXPosition--;
+                    textXPosition = textXPosition < 0 ? 0 : textXPosition;
+                    break;
+                case ConsoleKey.UpArrow:
+                    textYPosition--;
+                    textYPosition = textYPosition < 0 ? 0 : textYPosition;
+                    break;
+                case ConsoleKey.DownArrow:
+                    textYPosition++;
+                    break;
+                default:
+                    break;
+            }
         }
 
         static void Main(string[] args) { Program program = new Program(); }

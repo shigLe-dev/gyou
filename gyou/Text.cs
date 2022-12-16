@@ -1,56 +1,51 @@
-﻿using System.Diagnostics;
-
-namespace gyou
+﻿namespace gyou
 {
     public class Text
     {
-        private List<List<char>> source;
+        private List<List<Character>> characters;
 
         public Text(string source)
         {
-            this.source = Load(source);
+            Lexer lexer = new Lexer(source);
+            characters = Load(lexer);
         }
 
-        public char GetChar(int x, int y)
+        public Character GetCharacter(int x, int y)
         {
             if (y >= 0
-             && source.Count > y
+             && characters.Count > y
              && x >= 0
-             && source[y].Count > x)
-            {
-                return source[y][x];
-            }
+             && characters[y].Count > x)
+                return characters[y][x];
 
-            return ' ';
+            return new Character(" ", CharacterType.NORMAL);
         }
-        
-        private List<List<char>> Load(string source)
+ 
+        private List<List<Character>> Load(Lexer lexer)
         {
-            List<List<char>> ret = new List<List<char>>();
-            List<char> line = new List<char>();
+            Character c = lexer.NextCharacter();
+            List<List<Character>> ret = new List<List<Character>>();
+            List<Character> line = new List<Character>();
             ret.Add(line);
 
-            foreach (char c in source)
+            while (c.characterType != CharacterType.EOF)
             {
-                line.Add(c);
-
-                if (IsNewLineChar(c))
+                switch (c.characterType)
                 {
-                    line = new List<char>();
-                    ret.Add(line);
+                    case CharacterType.NEWLINE:
+                        line.Add(c);
+                        line = new List<Character>();
+                        ret.Add(line);
+                        break;
+                    default:
+                        line.Add(c);
+                        break;
                 }
+
+                c = lexer.NextCharacter();
             }
 
             return ret;
-        }
-
-        public static bool IsNewLineChar(char c)
-        {
-            if (c == '\n'
-             || c == '\r')
-                return true;
-
-            return false;
         }
     }
 }
