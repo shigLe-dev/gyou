@@ -1,5 +1,4 @@
-﻿using Ansi;
-using System.Text;
+﻿using System.Text;
 
 namespace gyou;
 
@@ -116,7 +115,7 @@ namespace gyou
 
     void Init()
     {
-        mode = Mode.Normal;
+        mode = Mode.Insert;
         Console.OutputEncoding = Encoding.UTF8;
         Console.CursorVisible = false;
         Console.SetCursorPosition(0, 0);
@@ -143,11 +142,7 @@ namespace gyou
                 {
                     if (isCursor)
                     {
-                        builder.SetBackgroundColor(new AnsiColor(255, 255, 255));
-                        builder.SetForegroundColor(new AnsiColor(0, 0, 0));
                         builder.Append(' ');
-                        builder.SetBackgroundColor(new AnsiColor(0, 0, 0));
-                        builder.SetForegroundColor(new AnsiColor(255, 255, 255));
                     }
                     else
                     {
@@ -157,11 +152,7 @@ namespace gyou
                 }
                 if (isCursor)
                 {
-                    builder.SetBackgroundColor(new AnsiColor(255, 255, 255));
-                    builder.SetForegroundColor(new AnsiColor(0, 0, 0));
                     builder.Append(c.ToString());
-                    builder.SetBackgroundColor(new AnsiColor(0, 0, 0));
-                    builder.SetForegroundColor(new AnsiColor(255, 255, 255));
                 }
                 else
                 {
