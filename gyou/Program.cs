@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Ansi;
+using System.Text;
 
 namespace gyou;
 
@@ -135,21 +136,37 @@ namespace gyou
         {
             for (int x = 0; x < width; x++)
             {
-                string beforeAnsiEscape = "";
-                string afterAnsiEscape = "";
-                if ((x + textXPosition) == cursorXPosition && (y + textYPosition) == cursorYPosition)
-                {
-
-                }
-
+                bool isCursor = (x + textXPosition) == cursorXPosition && (y + textYPosition) == cursorYPosition;
                 Character c = text.GetCharacter(x + textXPosition, y + textYPosition);
                 x += c.width - 1;
                 if (x >= width)
                 {
-                    builder.Append(beforeAnsiEscape + ' ' + afterAnsiEscape);
+                    if (isCursor)
+                    {
+                        builder.SetBackgroundColor(new AnsiColor(255, 255, 255));
+                        builder.SetForegroundColor(new AnsiColor(0, 0, 0));
+                        builder.Append(' ');
+                        builder.SetBackgroundColor(new AnsiColor(0, 0, 0));
+                        builder.SetForegroundColor(new AnsiColor(255, 255, 255));
+                    }
+                    else
+                    {
+                        builder.Append(' ');
+                    }
                     continue;
                 }
-                builder.Append(beforeAnsiEscape + c.ToString() + afterAnsiEscape);
+                if (isCursor)
+                {
+                    builder.SetBackgroundColor(new AnsiColor(255, 255, 255));
+                    builder.SetForegroundColor(new AnsiColor(0, 0, 0));
+                    builder.Append(c.ToString());
+                    builder.SetBackgroundColor(new AnsiColor(0, 0, 0));
+                    builder.SetForegroundColor(new AnsiColor(255, 255, 255));
+                }
+                else
+                {
+                    builder.Append(c.ToString());
+                }
             }
         }
         Console.Write(builder.ToString());
@@ -193,7 +210,7 @@ namespace gyou
         {
             case ConsoleKey.RightArrow:
                 cursorXPosition++;
-                return true; 
+                return true;
             case ConsoleKey.LeftArrow:
                 cursorXPosition--;
                 return true;
