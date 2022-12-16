@@ -1,20 +1,25 @@
-﻿using System.Diagnostics;
-using System.Text;
+﻿using System.Text;
 
-namespace gyou
+namespace gyou;
+
+delegate bool KeyEvent();
+
+internal class Program
 {
-    internal class Program
-    {
-        int width;
-        int height;
-        int textXPosition;
-        int textYPosition;
-        ConsoleKeyInfo key;
-        Text text;
+    int width;
+    int height;
+    int textXPosition;
+    int textYPosition;
+    int cursorXPosition;
+    int cursorYPosition;
+    List<KeyEvent> keyEvents;
+    ConsoleKeyInfo key;
+    Text text;
+    Mode mode;
 
-        Program()
-        {
-            text = new Text(@"using System.Text;
+    Program()
+    {
+        text = new Text(@"using System.Text;
 
 namespace gyou
 {
@@ -97,75 +102,112 @@ namespace gyou
     }
 }
 ");
-            Init();
+        keyEvents = RegisterKeyEvents();
+        Init();
 
-            while (true)
-            {
-                SetWindowSize();
-                RefleshScreen();
-                ProcessKeyPress();
-            }
-        }
-
-        void Init()
+        while (true)
         {
-            Console.OutputEncoding = Encoding.UTF8;
-            Console.CursorVisible = false;
-            Console.SetCursorPosition(0, 0);
+            SetWindowSize();
+            RefleshScreen();
+            ProcessKeyPress();
         }
-
-        void SetWindowSize()
-        {
-            width = Console.WindowWidth;
-            height = Console.WindowHeight;
-        }
-
-        void RefleshScreen()
-        {
-            Console.SetCursorPosition(0, 0);
-            StringBuilder builder = new StringBuilder();
-            for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    Character c = text.GetCharacter(x + textXPosition, y + textYPosition);
-                    x += c.width - 1;
-                    if (x >= width)
-                    {
-                        builder.Append(' ');
-                        continue;
-                    }
-                    builder.Append(c.ToString());
-                }
-            }
-            Console.Write(builder.ToString());
-        }
-
-        void ProcessKeyPress()
-        {
-            key = Console.ReadKey(true);
-
-            switch (key.Key)
-            {
-                case ConsoleKey.RightArrow:
-                    textXPosition++;
-                    break;
-                case ConsoleKey.LeftArrow:
-                    textXPosition--;
-                    textXPosition = textXPosition < 0 ? 0 : textXPosition;
-                    break;
-                case ConsoleKey.UpArrow:
-                    textYPosition--;
-                    textYPosition = textYPosition < 0 ? 0 : textYPosition;
-                    break;
-                case ConsoleKey.DownArrow:
-                    textYPosition++;
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        static void Main(string[] args) { Program program = new Program(); }
     }
+
+    void Init()
+    {
+        mode = Mode.Normal;
+        Console.OutputEncoding = Encoding.UTF8;
+        Console.CursorVisible = false;
+        Console.SetCursorPosition(0, 0);
+    }
+
+    void SetWindowSize()
+    {
+        width = Console.WindowWidth;
+        height = Console.WindowHeight;
+    }
+
+    void RefleshScreen()
+    {
+        Console.SetCursorPosition(0, 0);
+        StringBuilder builder = new StringBuilder();
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                string beforeAnsiEscape = "";
+                string afterAnsiEscape = "";
+                if ((x + textXPosition) == cursorXPosition && (y + textYPosition) == cursorYPosition)
+                {
+
+                }
+
+                Character c = text.GetCharacter(x + textXPosition, y + textYPosition);
+                x += c.width - 1;
+                if (x >= width)
+                {
+                    builder.Append(beforeAnsiEscape + ' ' + afterAnsiEscape);
+                    continue;
+                }
+                builder.Append(beforeAnsiEscape + c.ToString() + afterAnsiEscape);
+            }
+        }
+        Console.Write(builder.ToString());
+    }
+
+    void ProcessKeyPress()
+    {
+        key = Console.ReadKey(true);
+
+        foreach (var keyEvent in keyEvents)
+        {
+            // trueの場合は受け流さない
+            if (keyEvent.Invoke()) break;
+        }
+    }
+
+    List<KeyEvent> RegisterKeyEvents()
+    {
+        return new List<KeyEvent>
+        {
+            MoveCursor,
+            KeyInput
+        };
+    }
+
+    #region KeyEvents
+    bool KeyInput()
+    {
+        if (mode != Mode.Insert) return false;
+
+        // TODO: 文字入力
+
+        return true;
+    }
+
+    bool MoveCursor()
+    {
+        if (mode != Mode.Insert) return false;
+
+        switch (key.Key)
+        {
+            case ConsoleKey.RightArrow:
+                cursorXPosition++;
+                return true; 
+            case ConsoleKey.LeftArrow:
+                cursorXPosition--;
+                return true;
+            case ConsoleKey.UpArrow:
+                cursorYPosition--;
+                return true;
+            case ConsoleKey.DownArrow:
+                cursorYPosition++;
+                return true;
+            default:
+                return false;
+        }
+    }
+    #endregion
+
+    static void Main(string[] args) { Program program = new Program(); }
 }

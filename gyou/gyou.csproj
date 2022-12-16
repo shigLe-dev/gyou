@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Ansi" Version="1.0.3" />
     <PackageReference Include="EastAsianWidth" Version="1.2.0" />
   </ItemGroup>
 

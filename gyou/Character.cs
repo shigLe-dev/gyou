@@ -1,39 +1,38 @@
 ﻿using Kodnix.Character.Extensions;
 
-namespace gyou
+namespace gyou;
+
+public struct Character
 {
-    public struct Character
+    public readonly string rawSource;
+    public readonly CharacterType characterType;
+    public readonly int width = 1;
+
+    public Character(string rawSource, CharacterType characterType)
     {
-        public readonly string rawSource;
-        public readonly CharacterType characterType;
-        public readonly int width = 1;
+        this.rawSource = rawSource;
+        this.characterType = characterType;
 
-        public Character(string rawSource, CharacterType characterType)
+        switch (characterType)
         {
-            this.rawSource = rawSource;
-            this.characterType = characterType;
-
-            switch (characterType)
-            {
-                case CharacterType.NORMAL:
-                    width = rawSource.GetEastAsianWidthLength();
-                    break;
-            }
+            case CharacterType.NORMAL:
+                width = rawSource.GetEastAsianWidthLength();
+                break;
         }
+    }
 
-        public override string ToString()
+    public override string ToString()
+    {
+        switch (characterType)
         {
-            switch (characterType)
-            {
-                case CharacterType.NORMAL:
-                    return rawSource;
-                case CharacterType.NEWLINE:
-                    return " ";
-                case CharacterType.EOF:
-                    return " ";
-                default:
-                    return " ";
-            }
+            case CharacterType.NORMAL:
+                return rawSource;
+            case CharacterType.NEWLINE:
+                return " ";
+            case CharacterType.EOF:
+                return " ";
+            default:
+                return " ";
         }
     }
 }
