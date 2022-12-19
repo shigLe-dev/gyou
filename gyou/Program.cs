@@ -15,7 +15,6 @@ internal class Program
     List<KeyEvent> keyEvents;
     ConsoleKeyInfo key;
     Text text;
-    Mode mode;
 
     Program()
     {
@@ -115,7 +114,6 @@ namespace gyou
 
     void Init()
     {
-        mode = Mode.Insert;
         Console.OutputEncoding = Encoding.UTF8;
         Console.CursorVisible = false;
         Console.SetCursorPosition(0, 0);
@@ -186,8 +184,6 @@ namespace gyou
     #region KeyEvents
     bool KeyInput()
     {
-        if (mode != Mode.Insert) return false;
-
         // TODO: 文字入力
 
         return true;
@@ -195,8 +191,6 @@ namespace gyou
 
     bool MoveCursor()
     {
-        if (mode != Mode.Insert) return false;
-
         switch (key.Key)
         {
             case ConsoleKey.RightArrow:
